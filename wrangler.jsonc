@@ -1,0 +1,8 @@
+{
+  "name": "tamilmv-addon",
+  "main": "worker.js",
+  "compatibility_date": "2025-01-01",
+  "observability": {
+    "enabled": true
+  }
+}
