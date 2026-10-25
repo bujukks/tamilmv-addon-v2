@@ -5,6 +5,7 @@
   "observability": {
     "enabled": true
   },
+  "preview_urls": false,
   "env": {
     "v2": {
       "name": "tamilmv-addon-v2"
