@@ -12,9 +12,9 @@ const UA =
 const CINEMETA = "https://v3-cinemeta.strem.io";
 
 const DEFAULT_SOURCES = [
+  "TamilMV - Top Releases This Week|https://1tamilmv.fi/|.banger-row",
   "TamilMV - Latest WebHD|https://1tamilmv.fi/index.php?/forums/forum/11-web-hd-itunes-hd-bluray/&sortby=start_date&sortdirection=desc",
   "TamilMV - Hollywood Multi Audio|https://1tamilmv.fi/index.php?/forums/forum/17-hollywood-movies-in-multi-audios/&sortby=start_date&sortdirection=desc",
-  "TamilMV - Top Releases This Week|https://1tamilmv.fi/|.banger-row",
 ].join("\n");
 
 const DEFAULT_FALLBACK = "https://1tamilmv.fi";
