@@ -1,14 +1,9 @@
 {
-  "name": "tamilmv-addon",
+  "name": "tamilmv-addon-v2",
   "main": "worker.js",
   "compatibility_date": "2025-01-01",
   "observability": {
     "enabled": true
   },
-  "preview_urls": false,
-  "env": {
-    "v2": {
-      "name": "tamilmv-addon-v2"
-    }
-  }
+  "preview_urls": false
 }

@@ -55,7 +55,12 @@ The two Workers are deployed by completely separate mechanisms.
 | `tamilmv-addon-v2` | Cloudflare Git build on push to `main` | this repository |
 
 Only `tamilmv-addon-v2` is connected to this repository. Pushing to `main` triggers its
-Cloudflare Git build, which deploys against the `env.v2` target in `wrangler.jsonc`.
+Cloudflare Git build, which runs `wrangler deploy` from `wrangler.jsonc`. That file names
+`tamilmv-addon-v2` as its only target, so no deploy from this repository can reach the
+standalone Worker.
+
+The Cloudflare build's deploy command must stay as plain `npx wrangler deploy`. Adding
+`--env v2` fails the build, because no environment of that name is defined any more.
 
 `tamilmv-addon` is deliberately not connected to this repository. Its script lives in
 Cloudflare and is edited in the dashboard, so no push can deploy to or overwrite it.
