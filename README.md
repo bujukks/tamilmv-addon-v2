@@ -53,8 +53,7 @@ every push to `main`, so make changes in `worker.js` and push them.
 Pushing to `main` triggers the Cloudflare Git build, which runs `wrangler deploy` using
 `wrangler.jsonc`. That file names `tamilmv-addon-v2` as its target.
 
-The build's deploy command must stay as plain `npx wrangler deploy`. Adding `--env v2` fails
-the build, because no environment of that name is defined.
+The build's deploy command must stay as plain `npx wrangler deploy`.
 
 After each build, the log should read `Uploaded tamilmv-addon-v2`.
 
