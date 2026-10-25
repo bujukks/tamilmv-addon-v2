@@ -12,8 +12,8 @@ results as Stremio movie catalogs. No dependencies and no build step.
 | `https://tamilmv-addon.bujukks.workers.dev/catalog/movie/<catalog-id>.json` | Catalog data |
 | `https://tamilmv-addon-v2.bujukks.workers.dev/` | Same addon, second Worker |
 
-Install in Stremio: Addons, paste a manifest URL, Install. Both Worker URLs serve identical
-code, so either works.
+Install in Stremio: Addons, paste a manifest URL, Install. The two Workers are deployed
+independently and can drift apart, so pick one and stay with it.
 
 ## Catalogs
 
@@ -47,24 +47,22 @@ and existing Stremio installs will need to be re-added.
 
 ## Deployment
 
-Pushing to `main` deploys automatically through two independent paths:
+The two Workers are deployed by completely separate mechanisms.
 
-| Worker | Deployed by | Target set by |
+| Worker | Deployed by | Edited in |
 | --- | --- | --- |
-| `tamilmv-addon` | GitHub Actions, `.github/workflows/deploy.yml` | top-level `name` in `wrangler.jsonc` |
-| `tamilmv-addon-v2` | Cloudflare Git build | `env.v2.name`, via `wrangler deploy --env v2` |
+| `tamilmv-addon` | nothing in this repository | Cloudflare dashboard |
+| `tamilmv-addon-v2` | Cloudflare Git build on push to `main` | this repository |
 
-The two paths target different scripts, so they do not overwrite each other. The GitHub Action
-requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets.
+Only `tamilmv-addon-v2` is connected to this repository. Pushing to `main` triggers its
+Cloudflare Git build, which deploys against the `env.v2` target in `wrangler.jsonc`.
 
-The Cloudflare build for `tamilmv-addon-v2` must keep its deploy command set to:
+`tamilmv-addon` is deliberately not connected to this repository. Its script lives in
+Cloudflare and is edited in the dashboard, so no push can deploy to or overwrite it.
 
-```
-npx wrangler deploy --env v2
-```
-
-Without `--env v2` that build falls back to the top-level `name`, deploys to `tamilmv-addon`
-instead, overwrites it, and leaves `tamilmv-addon-v2` stale.
+The invariant to preserve after every build: the build log must read
+`Uploaded tamilmv-addon-v2`. If it reads `Uploaded tamilmv-addon`, the build is targeting the
+standalone Worker instead, which would overwrite it and leave `tamilmv-addon-v2` stale.
 
 `observability` is enabled, so the `console.error` diagnostics in `worker.js` (failed fetches,
 titles that fail to parse, Cinemeta lookup failures) appear under the Worker's Logs tab.
@@ -72,7 +70,6 @@ titles that fail to parse, Cinemeta lookup failures) appear under the Worker's L
 ## Layout
 
 ```
-worker.js                       the entire addon
-wrangler.jsonc                  Worker config, both deploy targets
-.github/workflows/deploy.yml    deploy on push to main
+worker.js         the entire addon
+wrangler.jsonc    Worker config, targets tamilmv-addon-v2
 ```
